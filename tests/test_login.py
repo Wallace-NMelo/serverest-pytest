@@ -16,7 +16,6 @@ def test_login_success():
     response, token = login(email, password)
     assert response.status_code == 200
     assert response.json()["message"] == 'Login realizado com sucesso'
-    print(">>>>>>>>>>>>>>>>>>>>>> TOKEEEEEEEN " + token)
 
 
 def test_login_email_failed():

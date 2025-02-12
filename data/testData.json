@@ -1,0 +1,8 @@
+[
+  {
+    "name" : "João Login da Silva",
+    "email" : "joao_test_login@example.com",
+    "password" : "senha123",
+    "administrator" : "true"
+  }
+]
