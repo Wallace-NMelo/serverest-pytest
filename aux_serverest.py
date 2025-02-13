@@ -103,13 +103,17 @@ def get_product_by_id(product_id):
     return response
 
 
-def get_dynamic_product_id():
+# Getting product ID and name
+
+def get_dynamic_product():
     url = f"{BASE_URL}/produtos"
     response = requests.get(url, headers=HEADERS)
     response_json = response.json()
 
     dynamic_id = response_json["produtos"][0]["_id"]  # if we don't have a static id
-    return dynamic_id
+    dynamic_name = response_json["produtos"][0]["nome"]
+
+    return dynamic_id, dynamic_name
 
 
 def create_product(authorization_token, product_name, preco, descricao, quantidade):
@@ -130,14 +134,14 @@ def create_product(authorization_token, product_name, preco, descricao, quantida
 # Find product by name
 def find_product_by_name(product_list, product_name):
     for product in product_list:
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>> product: " + str(product))
         if product['nome'] == product_name:
             return product
     return None
 
 
 # Function to delete a product
-def delete_product(product_id):
+def delete_product(authorization_token, product_id):
     url = f"{BASE_URL}/produtos/{product_id}"
-    response = requests.delete(url, headers=HEADERS)
+    HEADER_AUTHORIZATION = {"Authorization": f"{authorization_token}"}
+    response = requests.delete(url, headers=HEADER_AUTHORIZATION)
     return response

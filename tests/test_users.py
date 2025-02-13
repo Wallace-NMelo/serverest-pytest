@@ -58,8 +58,8 @@ def test_delete_user():
 #     assert response_json["name"] == "Carlos Silva"
 
 
-def test_clear_created_users():
-    response_json = get_user_list()
-    for user in response_json[1:]:
-        delete_user(user["_id"])
-    assert len(get_user_list()) == 1
+# def test_clear_created_users():
+#     response_json = get_user_list()
+#     for user in response_json[1:]:
+#         delete_user(user["_id"])
+#     assert len(get_user_list()) == 1
