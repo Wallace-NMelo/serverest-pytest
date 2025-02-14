@@ -1,6 +1,8 @@
 from aux_serverest import *
 
 
+# List the products scenarios
+
 def test_get_products():
     response = get_products()
     assert response.status_code == 200
@@ -16,6 +18,8 @@ def test_get_product_by_id():
     assert response.status_code == 200
     assert response_json['_id'] == product_id
 
+
+# Create products scenarios
 
 def test_create_products():
     # Payload User Elements
@@ -49,7 +53,6 @@ def test_create_products():
 
     # Delete product
     delete_product(authorization_token, product_id)
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>> delete_product(authorization_token, product_id) " + str(delete_product(authorization_token, product_id)))
 
     # Delete user
     delete_user(user_id)
@@ -71,7 +74,6 @@ def test_create_products_same_name():
     preco = 4500
     descricao = 'Cell phone'
     quantidade = 100
-    print(">>>>>>>>>>>>>>>>>>>>>>> get_dynamic_product()[1] " + product_name)
 
     # Try to create a product with an existence name
     response_product = create_product(authorization_token, product_name, preco, descricao, quantidade)
@@ -96,3 +98,48 @@ def test_create_products_invalid_token():
     # Try to create a product with an invalid token
     response_product = create_product(invalid_token, product_name, preco, descricao, quantidade)
     assert response_product.status_code == 401
+
+
+# Edit a product
+
+def test_edit_product():
+    # Payload User Elements
+    name = "Mary"
+    email = "mary_test223@example.com"
+    password = "password123"
+    administrator = "true"
+    response_user = create_user(name, email, password, administrator)
+
+    # Payload Product Elements
+    product_name = 'iPhone 14'
+    preco = 4500
+    descricao = 'Cell phone'
+    quantidade = 100
+
+    # Get Login Token
+    authorization_token = login(email, password)[1]
+
+    # Try to create a product with an existence name
+    response_product = create_product(authorization_token, product_name, preco, descricao, quantidade)
+
+    user_id = response_user.json()["_id"]
+    product_id = response_product.json()["_id"]
+    # Edited Payload Product Elements
+    updated_product_name = 'MacBook Air'
+
+    response_edit_product = edit_product(authorization_token, product_id, updated_product_name, preco, descricao, quantidade)
+    assert response_edit_product.status_code == 200
+    assert response_edit_product.json()["message"] == "Registro alterado com sucesso"
+
+    # Validate Edited Product Content
+    product_data = find_product_by_name(get_products_list(), updated_product_name)
+    assert product_data["nome"] == updated_product_name
+
+    # Delete product
+    delete_product(authorization_token, product_id)
+
+    # Delete user
+    delete_user(user_id)
+
+
+

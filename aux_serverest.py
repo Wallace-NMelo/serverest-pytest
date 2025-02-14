@@ -134,6 +134,7 @@ def create_product(authorization_token, product_name, preco, descricao, quantida
 # Find product by name
 def find_product_by_name(product_list, product_name):
     for product in product_list:
+        print(">>>>>>>>>>>>>>>>>> product['nome'] " + str(product['nome']))
         if product['nome'] == product_name:
             return product
     return None
@@ -145,3 +146,24 @@ def delete_product(authorization_token, product_id):
     HEADER_AUTHORIZATION = {"Authorization": f"{authorization_token}"}
     response = requests.delete(url, headers=HEADER_AUTHORIZATION)
     return response
+
+
+# Function to edit a product
+def edit_product(authorization_token, product_id, updated_product_name, preco, descricao, quantidade):
+    url = f"{BASE_URL}/produtos/{product_id}"
+    HEADER_AUTHORIZATION = {"Authorization": f"{authorization_token}"}
+    updated_payload = {
+        "nome": updated_product_name,
+        "preco": preco,
+        "descricao": descricao,
+        "quantidade": quantidade
+    }
+    response = requests.put(url, headers=HEADER_AUTHORIZATION, json=updated_payload)
+    return response
+
+
+# Function to get the list of products
+def get_product_list():
+    url = f"{BASE_URL}/produtos"
+    response = requests.get(url, headers=HEADERS)
+    return response.json()["produtos"]
